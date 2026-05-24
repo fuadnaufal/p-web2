@@ -121,3 +121,79 @@
     WHERE is_deleted = 0 
     ORDER BY harga DESC 
     LIMIT 5;
+
+# Tugas 2: Desain Database Lengkap
+## 1. ERD
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/4c59c3ad-49d5-468c-99e6-0d14b6ef4a23" />
+
+## 2. Screenshot
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/537bdaff-3042-47b3-b441-2ec1b3179770" />
+
+### 1. Modifikasi Tabel Buku:
+* Ganti kolom kategori (ENUM) menjadi id_kategori (INT)
+* Ganti kolom penerbit (VARCHAR) menjadi id_penerbit (INT)
+
+### 2. Tambahkan FOREIGN KEY
+Data yang harus diisi:
+* Minimal 5 kategori
+* Minimal 5 penerbit
+* Minimal 15 buku dengan relasi yang benar
+
+### 3. Query yang harus dibuat:
+1. JOIN untuk tampilkan buku dengan nama kategori dan penerbit
+   <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/8198d8cc-e154-47b3-bcf7-dfcb72e9e1d8" />
+
+       SELECT 
+            b.id_buku,
+            b.kode_buku,
+            b.judul,
+            b.pengarang,
+            k.nama_kategori,
+            p.nama_penerbit
+        FROM buku b
+        LEFT JOIN kategori_buku k ON b.id_kategori = k.id_kategori
+        LEFT JOIN penerbit p ON b.id_penerbit = p.id_penerbit
+        WHERE b.is_deleted = 0;
+
+2. Jumlah buku per kategori
+   <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/59972f6e-e682-432c-bbfd-9f429a3f048c" />
+
+       SELECT 
+            k.nama_kategori,
+            IFNULL(SUM(b.stok), 0) AS total_stok_buku
+        FROM kategori_buku k
+        LEFT JOIN buku b ON k.id_kategori = b.id_kategori AND b.is_deleted = 0
+        GROUP BY k.id_kategori, k.nama_kategori;
+
+4. Jumlah buku per penerbit
+   <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/d394888a-4e1b-4f80-a0ad-38833f51d996" />
+   
+       SELECT 
+            p.nama_penerbit,
+            IFNULL(SUM(b.stok), 0) AS total_stok_buku
+        FROM penerbit p
+        LEFT JOIN buku b ON p.id_penerbit = b.id_penerbit AND b.is_deleted = 0
+        GROUP BY p.id_penerbit, p.nama_penerbit;
+   
+5. Buku beserta detail lengkap (kategori + penerbit)
+   <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/0298b446-1e89-463e-ab62-263ec7ae59a6" />
+           
+       SELECT 
+            b.id_buku,
+            b.kode_buku,
+            b.judul,
+            b.pengarang,
+            b.tahun_terbit,
+            b.isbn,
+            b.harga,
+            b.stok,
+            b.deskripsi,
+            IFNULL(k.nama_kategori, 'Belum Diatur') AS kategori,
+            IFNULL(p.nama_penerbit, 'Belum Diatur') AS penerbit,
+            IFNULL(r.nama_rak, 'Belum Diatur') AS nama_rak,
+            IFNULL(r.lokasi, 'Belum Diatur') AS lokasi_rak
+        FROM buku b
+        LEFT JOIN kategori_buku k ON b.id_kategori = k.id_kategori
+        LEFT JOIN penerbit p ON b.id_penerbit = p.id_penerbit
+        LEFT JOIN rak r ON b.id_rak = r.id_rak
+        WHERE b.is_deleted = 0;
