@@ -2,7 +2,7 @@
 ### 1. Screenshot hasil tampilan view anggota
 <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/3ba3a4ec-2566-4125-baf5-e2148bb6d442" />
 
-### 2. Screenshot hasil tampilan detai anggota
+### 2. Screenshot hasil tampilan detail anggota
 <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/3a7d5959-7b81-4f3a-aacd-c00007d810fd" />
 
 # Tugas 2: Controller untuk Kategori Buku
